@@ -942,7 +942,7 @@ function DbConfig($Language,$MysqlExt = FALSE){//The screen for users to input m
         <?php
         }else{
         ?>
-            <input type="hidden" name="MysqliExt" value="0" />
+            <input type="hidden" name="MysqliExt" value="1" />
         <?php
         }
         ?>
@@ -1121,15 +1121,8 @@ function CompanySetup($UserLanguage,$HostName,$UserName,$Password,$DatabaseName,
 //@para $NewDB is the new database name
 //The purpose of this function is populate database with data from the sql file by mysqli
 function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
-	if($DBType == 'mysqli'){
-		mysqli_select_db($db,$NewDB);
-	}else{
-		mysql_select_db($NewDB,$db);
-	}
+			if($NewSQL){
 
-	if(file_exists($NewSQL)){
-		PopulateSQLDataBySQL($NewSQL,$db,$DBType,$NewDB, false);
-/*
 				if($DBType == 'mysqli'){//if the mysql db type is mysqli
 						mysqli_select_db($db,$NewDB);
 						//currently there is no 'USE' statements in sql file, no bother to remove them
@@ -1141,7 +1134,7 @@ function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
 
 						$result = mysqli_multi_query($db,$sql);
 						if(!$result){
-							echo 'Failed to populate the database'.' '.$NewDB.' and the error is'.' '.mysqli_error($db);
+							prnMsg(_('Failed to populate the database'.' '.$NewDB.' and the error is').' '.mysqli_error($db),'error');
 						}
 						//now clear the result otherwise the next operation will failed with commands out of sync
 						//Since the mysqli_multi_query() return boolean value, we must retrieve the query result set
@@ -1154,23 +1147,29 @@ function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
 							}
 						} while (mysqli_more_results($db)?mysqli_next_result($db):false);
 						//} while (mysqli_next_result($db));
+
+
 				}else{
 						PopulateSQLDataBySQL($NewSQL,$db,$DBType,$NewDB);
 				}
-*/
 
-	}
 
-	if($Demo){
-		PopulateSQLDataBySQL($Demo,$db,$DBType,false,$NewDB);
-/*
+			}
+			if($Demo){
+
+				if($DBType == 'mysqli'){
+					mysqli_select_db($db,$NewDB);
+				}else{
+					mysql_select_db($NewDB,$db);
+				}
+					PopulateSQLDataBySQL($Demo,$db,$DBType,false,$NewDB);
 						//we can let users wait instead of changing the my.cnf file
 						//It is a non affordable challenge for them since wamp set the max_allowed_packet 1M
 						//and weberpdemo.sql is 1.4M so at least it cannot install in wamp
 						//so we not use the multi query here
 
 
-						$SQLFile = fopen($Demo);
+					/*	$SQLFile = fopen($Demo);
 
 						$sql = file_get_contents($Demo);
 						if(!$sql){
@@ -1180,22 +1179,26 @@ function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
 						$result = mysqli_multi_query($db,$sql);
 
 						if(!$result){
-							echo _('Failed to populate the database'.' '.$NewDB.' and the error is').' '.mysqli_error($db);
+							prnMsg(_('Failed to populate the database'.' '.$NewDB.' and the error is').' '.mysqli_error($db),'error');
 						}
 						//clear the bufferred result
 						do {
 							if($result = mysqli_store_result($db)){
 								mysqli_free_result($result);
 							}
-						} while (mysqli_more_results($db)?mysqli_next_result($db):false);
+						} while (mysqli_more_results($db)?mysqli_next_result($db):false); */
 
 
-				}else{
+			/*	}else{
 						mysqli_select_db($db,$NewDB);
 						PopulateSQLDataBySQL($Demo,$db,$DBType,false,$NewDB);
+			}*/
 			}
-*/
-	}
+
+
+
+
+
 }
 
 //@para $File is the sql file name
