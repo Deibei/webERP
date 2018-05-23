@@ -1129,7 +1129,7 @@ function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
 
 	if(file_exists($NewSQL)){
 		PopulateSQLDataBySQL($NewSQL,$db,$DBType,$NewDB, false);
-/*
+
 				if($DBType == 'mysqli'){//if the mysql db type is mysqli
 						mysqli_select_db($db,$NewDB);
 						//currently there is no 'USE' statements in sql file, no bother to remove them
@@ -1157,7 +1157,7 @@ function PopulateSQLData($NewSQL=false,$Demo=false,$db,$DBType,$NewDB = false){
 				}else{
 						PopulateSQLDataBySQL($NewSQL,$db,$DBType,$NewDB);
 				}
-*/
+
 
 	}
 
